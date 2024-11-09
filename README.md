@@ -6,51 +6,51 @@ alias ls='ls --color=auto'
 alias ll='ls -alF'
 
 view() {
-  while [ $# -gt 0 ]; do
-    if [ -L $1 ]; then
-      file $1
-      target=$(readlink $1)
-      if [ ${target:0:1} == '/' ]; then
-        view $target
-      else
-        view $(dirname $1)/$target
-      fi
-
-    else
-      if [ ! -e $1 ]; then
-        echo "\`$1' does not exist!"
-
-      elif [ -f $1 ]; then
-        if [[ $(file $1) =~ 'text' ]]; then
-          if [ $(tail -n 1 $1 | wc -l) -eq 1 ]; then
+    while [ $# -gt 0 ]; do
+        if [ -L $1 ]; then
             file $1
-            cat $1
-          else
-            echo "\`$1' has no line terminator at the end!"
-            file $1
-            cat $1
-            echo ""
-          fi
+            target=$(readlink $1)
+            if [ ${target:0:1} == '/' ]; then
+                view $target
+            else
+                view $(dirname $1)/$target
+            fi
 
         else
-          file $1
+            if [ ! -e $1 ]; then
+                echo "\`$1' does not exist!"
+
+            elif [ -f $1 ]; then
+                if [[ $(file $1) =~ 'text' ]]; then
+                    if [ $(tail -n 1 $1 | wc -l) -eq 1 ]; then
+                        file $1
+                        cat $1
+                    else
+                        echo "\`$1' has no line terminator at the end!"
+                        file $1
+                        cat $1
+                        echo ""
+                    fi
+
+                else
+                    file $1
+                fi
+
+            elif [ -d $1 ]; then
+                file $1
+                ll $1
+
+            else
+                file $1
+            fi
         fi
 
-      elif [ -d $1 ]; then
-        file $1
-        ll $1
+        if [ $# -gt 1 ]; then
+            echo ""
+        fi
 
-      else
-        file $1
-      fi
-    fi
-
-    if [ $# -gt 1 ]; then
-      echo ""
-    fi
-
-    shift
-  done
+        shift
+    done
 }
 ```
 
