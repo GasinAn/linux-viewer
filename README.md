@@ -16,33 +16,31 @@ view() {
                 view $(dirname $1)/$target
             fi
 
-        else
-            if [ ! -e $1 ]; then
-                echo "\`$1' does not exist!"
+        elif [ ! -e $1 ]; then
+            echo "\`$1' does not exist!"
 
-            elif [ -f $1 ]; then
-                if [[ $(file $1) =~ 'text' ]]; then
-                    if [ $(tail -n 1 $1 | wc -l) -eq 1 ]; then
-                        file $1
-                        cat $1
-                    else
-                        echo "\`$1' has no line terminator at the end!"
-                        file $1
-                        cat $1
-                        echo ""
-                    fi
-
-                else
+        elif [ -f $1 ]; then
+            if [[ $(file $1) =~ 'text' ]]; then
+                if [ $(tail -n 1 $1 | wc -l) -eq 1 ]; then
                     file $1
+                    cat $1
+                else
+                    echo "\`$1' has no line terminator at the end!"
+                    file $1
+                    cat $1
+                    echo ""
                 fi
-
-            elif [ -d $1 ]; then
-                file $1
-                ll $1
 
             else
                 file $1
             fi
+
+        elif [ -d $1 ]; then
+            file $1
+            ll $1
+
+        else
+            file $1
         fi
 
         if [ $# -gt 1 ]; then
