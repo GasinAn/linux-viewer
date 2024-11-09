@@ -18,7 +18,7 @@ view() {
 
     else
       if [ ! -e $1 ]; then
-        echo "\`$1' does not exists!"
+        echo "\`$1' does not exist!"
 
       elif [ -f $1 ]; then
         if [[ $(file $1) =~ 'text' ]]; then
@@ -77,7 +77,7 @@ line 1 in `goodfile'
 line 2 in `goodfile'
 
 files_for_testing/link2badfile: broken symbolic link to link2link2badfile
-`files_for_testing/link2link2badfile' does not exists!
+`files_for_testing/link2link2badfile' does not exist!
 
 files_for_testing/link2goodfile: symbolic link to goodfile
 files_for_testing/goodfile: ASCII text
