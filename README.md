@@ -17,7 +17,7 @@ view() {
             fi
 
         elif [ ! -e $1 ]; then
-            echo "\`$1' does not exist!"
+            echo "\"$1\" does not exist!"
 
         elif [ -f $1 ]; then
             if [[ $(file $1) =~ 'text' ]]; then
@@ -25,7 +25,7 @@ view() {
                     file $1
                     cat $1
                 else
-                    echo "\`$1' has no line terminator at the end!"
+                    echo "\"$1\" has no line terminator at the end!"
                     file $1
                     cat $1
                     echo ""
