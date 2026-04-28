@@ -6,12 +6,12 @@ alias ls='ls --color=auto'
 alias ll='ls -alF'
 
 view() {
-    if [ $# -eq 0 ]; then
+    if [ "$#" -eq 0 ]; then
         file .
         ll .
 
     else
-        while [ $# -gt 0 ]; do
+        while [ "$#" -gt 0 ]; do
             if [ -L "$1" ]; then
                 file "$1"
                 target=$(readlink "$1")
@@ -48,7 +48,7 @@ view() {
                 file "$1"
             fi
 
-            if [ $# -gt 1 ]; then
+            if [ "$#" -gt 1 ]; then
                 echo ""
             fi
 
