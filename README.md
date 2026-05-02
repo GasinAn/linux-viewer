@@ -3,7 +3,7 @@ Simple and Stupid Linux FILE viewer applying corresponding methods to view diffe
 
 ```bash
 alias ls='ls --color=auto'
-alias ll='ls -alF'
+alias ll='ls -alhF'
 
 view() {
     if [ "$#" -eq 0 ]; then
