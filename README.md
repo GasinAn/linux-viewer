@@ -14,7 +14,7 @@ view() {
         while [ "$#" -gt 0 ]; do
             if [ -L "$1" ]; then
                 file "$1"
-                target=$(readlink "$1")
+                local target=$(readlink "$1")
                 if [ ${target:0:1} == '/' ]; then
                     view "$target"
                 else
