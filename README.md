@@ -34,19 +34,20 @@ view() {
                 echo "\"$1\" does not exist!"
 
             elif [ -f "$1" ]; then
-                if [[ $(file -- "$1") =~ 'text' ]]; then
+                local res=$(file -- "$1")
+                local res_tail=${res#$1}
+                if [[ "${res_tail,,}" =~ 'text' ]]; then
                     if [ $(tail -n 1 -- "$1" | wc -l --) -eq 1 ]; then
-                        wraped_file "$1"
+                        echo "\"$1\"${res_tail/${2:-nevermatch}/\"$2\"}"
                         cat -- "$1"
                     else
                         echo "\"$1\" has no line terminator at the end!"
-                        wraped_file "$1"
+                        echo "\"$1\"${res_tail/${2:-nevermatch}/\"$2\"}"
                         cat -- "$1"
                         echo ""
                     fi
-
                 else
-                    wraped_file "$1"
+                    echo "\"$1\"${res_tail/${2:-nevermatch}/\"$2\"}"
                 fi
 
             elif [ -d "$1" ]; then
