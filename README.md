@@ -22,7 +22,12 @@ view() {
                 if [ ${target:0:1} == '/' ]; then
                     view "$target"
                 else
-                    view $(dirname -- "$1")/"$target"
+                    local dir=$(dirname -- "$1")
+                    if [ "$dir" != '/' ]; then
+                        view "$dir"/"$target"
+                    else
+                        view /"$target"
+                    fi
                 fi
 
             elif [ ! -e "$1" ]; then
