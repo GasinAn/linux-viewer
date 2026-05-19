@@ -4,58 +4,55 @@ Simple and Stupid Linux FILE viewer applying corresponding methods to view diffe
 ```bash
 alias ls='ls --color=auto'
 alias ll='ls -alhF'
-wraped_file() {
-    local res=$(file -- "$1")
-    local res_tail=${res#$1}
-    echo "\"$1\"${res_tail/${2:-nevermatch}/\"$2\"}"
-}
 view() {
     if [ "$#" -eq 0 ]; then
-        wraped_file .
-        ll .
+        view .
 
     else
         while [ "$#" -gt 0 ]; do
-            if [ -L "$1" ]; then
-                local target=$(readlink -- "$1")
-                wraped_file "$1" "$target"
-                if [ ${target:0:1} == '/' ]; then
-                    view "$target"
-                else
-                    local dir=$(dirname -- "$1")
-                    if [ "$dir" != '/' ]; then
-                        view "$dir"/"$target"
-                    else
-                        view /"$target"
-                    fi
-                fi
-
-            elif [ ! -e "$1" ]; then
+            if [ ! -e "$1" ] && [ ! -L "$1" ]; then
                 echo "\"$1\" does not exist!"
 
-            elif [ -f "$1" ]; then
+            else
                 local res=$(file -- "$1")
                 local res_tail=${res#$1}
-                if [[ "${res_tail,,}" =~ 'text' ]]; then
-                    if [ $(tail -n 1 -- "$1" | wc -l --) -eq 1 ]; then
-                        echo "\"$1\"${res_tail/${2:-nevermatch}/\"$2\"}"
-                        cat -- "$1"
+
+                if [ -L "$1" ]; then
+                    local target=$(readlink -- "$1")
+                    echo "\"$1\"${res_tail/$target/\"$target\"}"
+                    if [ ${target:0:1} == '/' ]; then
+                        view "$target"
                     else
-                        echo "\"$1\" has no line terminator at the end!"
-                        echo "\"$1\"${res_tail/${2:-nevermatch}/\"$2\"}"
-                        cat -- "$1"
-                        echo ""
+                        local dir=$(dirname -- "$1")
+                        if [ "$dir" != '/' ]; then
+                            view "$dir"/"$target"
+                        else
+                            view /"$target"
+                        fi
                     fi
+
+                elif [ -f "$1" ]; then
+                    if [[ "${res_tail,,}" =~ 'text' ]]; then
+                        if [ $(tail -n 1 -- "$1" | wc -l --) -eq 1 ]; then
+                            echo "\"$1\"${res_tail/$target/\"$target\"}"
+                            cat -- "$1"
+                        else
+                            echo "\"$1\" has no line terminator at the end!"
+                            echo "\"$1\"${res_tail/$target/\"$target\"}"
+                            cat -- "$1"
+                            echo ""
+                        fi
+                    else
+                        echo "\"$1\"${res_tail/$target/\"$target\"}"
+                    fi
+
+                elif [ -d "$1" ]; then
+                    echo "\"$1\"${res_tail/$target/\"$target\"}"
+                    ll -- "$1"
+
                 else
-                    echo "\"$1\"${res_tail/${2:-nevermatch}/\"$2\"}"
+                    echo "\"$1\"${res_tail/$target/\"$target\"}"
                 fi
-
-            elif [ -d "$1" ]; then
-                wraped_file "$1"
-                ll -- "$1"
-
-            else
-                wraped_file "$1"
             fi
 
             if [ "$#" -gt 1 ]; then
