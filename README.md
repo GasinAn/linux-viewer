@@ -67,7 +67,7 @@ view() {
 
 ## Examples
 ```
-gasinan:~/linux-viewer$ view files_for_testing/ ./files_for_testing/* /bin/bash /dev/null
+gasinan:~/viewer$ view files_for_testing/ ./files_for_testing/* /bin/bash /dev/null
 "files_for_testing/": directory
 total 16K
 drwxr-xr-x 2 gasinan gasinan 4.0K Jan  1 00:00  ./
