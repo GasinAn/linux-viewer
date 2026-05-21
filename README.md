@@ -1,5 +1,5 @@
 # viewer
-Simple and Stupid Linux FILE viewer applying corresponding methods to view different kinds of FILEs
+Simple and Stupid Linux Bash FILE Viewer Applying Corresponding Methods to View Different Kinds of FILEs
 
 ```bash
 alias ls='ls --color=auto'
